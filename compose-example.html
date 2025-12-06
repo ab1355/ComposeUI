@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ComposeUI - Simple Example</title>
+    <link rel="stylesheet" href="/magnet.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        .example-section {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 0.5rem;
+        }
+        h1 {
+            color: #333;
+        }
+        h2 {
+            color: #555;
+            margin-top: 2rem;
+        }
+        code {
+            background: #e9ecef;
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+            font-family: 'Courier New', monospace;
+        }
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+        }
+        #app {
+            min-height: 200px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎨 ComposeUI - Simple Example</h1>
+    <p>This page demonstrates the basic usage of ComposeUI's composable component system.</p>
+
+    <div class="example-section">
+        <h2>1. Emoji Authentication</h2>
+        <p>Try logging in with the emoji pattern: <code>🔐🌟🎯</code></p>
+        
+        <div style="margin: 1rem 0;">
+            <input 
+                type="text" 
+                id="emoji-input" 
+                placeholder="Enter emoji pattern"
+                style="padding: 0.5rem; font-size: 1.5rem; width: 100%; margin-bottom: 0.5rem;"
+            />
+            <button class="btn primary-btn" onclick="tryLogin()">Login</button>
+            <button class="btn secondary-btn" onclick="tryLogout()">Logout</button>
+        </div>
+        
+        <div id="login-status" style="margin-top: 1rem;"></div>
+    </div>
+
+    <div class="example-section">
+        <h2>2. Dynamic Dashboard</h2>
+        <p>Once logged in, you can add components to the dashboard below:</p>
+        
+        <div style="margin: 1rem 0;">
+            <button class="btn success-btn" onclick="addWidget()">Add Widget 📊</button>
+            <button class="btn outline-primary-btn" onclick="addAlert()">Add Alert 📢</button>
+            <button class="btn outline-secondary-btn" onclick="clearAll()">Clear All 🗑️</button>
+        </div>
+        
+        <div id="app"></div>
+    </div>
+
+    <div class="example-section">
+        <h2>3. Code Example</h2>
+        <p>Here's how the above works:</p>
+        <pre><code>// Initialize ComposeUI
+const composeUI = new ComposeUI();
+const emojiSecurity = new EmojiSecurity();
+
+// Register user
+emojiSecurity.registerUser('demo', '🔐🌟🎯', ['*']);
+
+// Authenticate
+const result = emojiSecurity.authenticate('demo', '🔐🌟🎯');
+
+// Create dashboard and add components
+if (result.success) {
+    const dashboard = composeUI.createDashboard('main');
+    composeUI.addToDashboard('main', 'stat-widget', {
+        emoji: '👥',
+        value: '1,234',
+        label: 'Users'
+    });
+    composeUI.mount('main', '#app');
+}</code></pre>
+    </div>
+
+    <!-- Load ComposeUI Scripts -->
+    <script src="/components/compose.js"></script>
+    <script src="/components/emoji-security.js"></script>
+    <script src="/components/component-registry.js"></script>
+
+    <script>
+        // Initialize
+        const composeUI = new ComposeUI();
+        const emojiSecurity = new EmojiSecurity();
+        composeUI.setSecurityProvider(emojiSecurity);
+        registerDefaultComponents(composeUI);
+
+        // Register demo user
+        emojiSecurity.registerUser('demo', '🔐🌟🎯', ['*']);
+
+        let dashboard = null;
+
+        function updateLoginStatus() {
+            const status = emojiSecurity.getSecurityStatus();
+            const statusDiv = document.getElementById('login-status');
+            statusDiv.innerHTML = `
+                <div style="padding: 1rem; background: ${status.status === 'authenticated' ? '#84f1c9' : '#fcc5c5'}; 
+                     border-radius: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <span style="font-size: 1.5rem;">${status.emoji}</span>
+                    <div>
+                        <strong>${status.message}</strong>
+                        ${status.user ? `<br><small>User: ${status.user}</small>` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        function tryLogin() {
+            const pattern = document.getElementById('emoji-input').value;
+            const result = emojiSecurity.authenticate('demo', pattern);
+            
+            alert(result.message);
+            updateLoginStatus();
+
+            if (result.success && !dashboard) {
+                dashboard = composeUI.createDashboard('main');
+                composeUI.mount('main', '#app');
+                
+                // Add welcome message
+                composeUI.addToDashboard('main', 'alert', {
+                    type: 'success',
+                    message: '✅ Login successful! You can now add components.',
+                    icon: 'fas fa-check-circle'
+                });
+            }
+        }
+
+        function tryLogout() {
+            const result = emojiSecurity.logout();
+            alert(result.message);
+            updateLoginStatus();
+        }
+
+        function addWidget() {
+            if (!emojiSecurity.isAuthenticated()) {
+                alert('🔒 Please login first!');
+                return;
+            }
+
+            const widgets = [
+                { emoji: '👥', value: Math.floor(Math.random() * 5000), label: 'Users', trend: Math.floor(Math.random() * 30) - 10 },
+                { emoji: '📈', value: Math.floor(Math.random() * 100) + '%', label: 'Growth', trend: Math.floor(Math.random() * 20) },
+                { emoji: '🔐', value: Math.floor(Math.random() * 1000), label: 'Secure Logins', trend: 5 },
+                { emoji: '⚡', value: Math.floor(Math.random() * 500) + 'ms', label: 'Response Time', trend: -8 }
+            ];
+
+            const widget = widgets[Math.floor(Math.random() * widgets.length)];
+            composeUI.addToDashboard('main', 'stat-widget', widget);
+        }
+
+        function addAlert() {
+            if (!emojiSecurity.isAuthenticated()) {
+                alert('🔒 Please login first!');
+                return;
+            }
+
+            const alerts = [
+                { type: 'success', message: '✅ Operation completed successfully!', icon: 'fas fa-check-circle' },
+                { type: 'warning', message: '⚠️ Warning: Check your settings', icon: 'fas fa-exclamation-triangle' },
+                { type: 'primary', message: 'ℹ️ New update available', icon: 'fas fa-info-circle' }
+            ];
+
+            const alert = alerts[Math.floor(Math.random() * alerts.length)];
+            composeUI.addToDashboard('main', 'alert', alert);
+        }
+
+        function clearAll() {
+            if (!emojiSecurity.isAuthenticated()) {
+                alert('🔒 Please login first!');
+                return;
+            }
+
+            if (dashboard) {
+                const d = composeUI.dashboards.get('main');
+                while (d.components.length > 0) {
+                    composeUI.removeFromDashboard('main', d.components[0].id);
+                }
+            }
+        }
+
+        // Initial status update
+        updateLoginStatus();
+    </script>
+</body>
+</html>

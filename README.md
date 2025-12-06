@@ -1,6 +1,17 @@
-# Magnet UI
+# Magnet UI - Now with ComposeUI! 🎨
 
 Magnet UI is free, open sourced library that provides ready-to-use frontend components and it is user-friendly and customizable. Spend less time in designing and concentrate more on logic without hustling on UI.
+
+## 🚀 NEW: ComposeUI - Composable Component System
+
+ComposeUI extends Magnet UI with a powerful **composable component system** that enables:
+
+- **🎯 Instant Dashboards**: Create dynamic dashboards programmatically without writing HTML
+- **🔐 Emoji-Based Security**: Revolutionary authentication using emojis as security features instead of vulnerabilities
+- **⚡ Dynamic Composition**: Build and modify UI components on-the-fly
+- **🛡️ Secure by Design**: Built-in permission system and session management
+
+[📚 View ComposeUI Documentation](docs/COMPOSE_DOCUMENTATION.md) | [🎮 Try the Dashboard Builder](dashboard-builder.html)
 
 ---
 
@@ -199,6 +210,58 @@ You can check out the simple slider [here](https://magnet-ui.netlify.app/docs/do
 
 * Filter Slider
 * Volume Slider
+
+---
+
+## 🎨 ComposeUI Features
+
+### Composable Component System
+
+ComposeUI transforms static components into a dynamic, composable system:
+
+```javascript
+// Initialize
+const composeUI = new ComposeUI();
+const emojiSecurity = new EmojiSecurity();
+
+// Register user with emoji pattern
+emojiSecurity.registerUser('user1', '🔐🌟🎯🚀', ['*']);
+
+// Authenticate with emojis
+emojiSecurity.authenticate('user1', '🔐🌟🎯🚀');
+
+// Create instant dashboard
+const dashboard = composeUI.createDashboard('myDashboard');
+
+// Add components dynamically
+composeUI.addToDashboard('myDashboard', 'stat-widget', {
+    emoji: '👥',
+    value: '1,234',
+    label: 'Total Users'
+});
+
+composeUI.mount('myDashboard', '#app');
+```
+
+### Emoji-Based Security 🔐
+
+Instead of traditional passwords that can be vulnerabilities, ComposeUI uses **emojis as security features**:
+
+- **Visual Authentication**: Easy to remember patterns like 🔐🌟🎯🚀
+- **Large Character Space**: Thousands of emojis provide strong security
+- **No Dictionary Attacks**: Emojis aren't in password databases
+- **Session Management**: Automatic timeouts and status monitoring
+- **Permission Control**: Fine-grained component access
+
+### Benefits
+
+1. **Instant Dashboards**: No HTML writing required
+2. **Dynamic Updates**: Modify dashboards in real-time
+3. **Secure by Default**: Built-in authentication and authorization
+4. **Cybersecurity Focus**: Emojis turn potential vulnerabilities into strengths
+5. **Developer Friendly**: Simple API for complex dashboards
+
+[📖 Full Documentation](docs/COMPOSE_DOCUMENTATION.md)
 
 ---
 
