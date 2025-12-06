@@ -173,15 +173,12 @@ class EmojiSecurity {
             '🦄', '🐉', '🦁', '🐯', '🦅'
         ];
 
-        const length = 4 + Math.floor(Math.random() * 3); // 4-6 emojis
-        let pattern = '';
+        // Generate 4-6 unique emojis for stronger security
+        const length = 4 + Math.floor(Math.random() * 3); // Results in 4, 5, or 6
+        const shuffled = [...emojis].sort(() => Math.random() - 0.5);
+        const selected = shuffled.slice(0, length);
         
-        for (let i = 0; i < length; i++) {
-            const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
-            pattern += randomEmoji;
-        }
-
-        return pattern;
+        return selected.join('');
     }
 
     /**
